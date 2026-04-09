@@ -1,0 +1,8 @@
+[package]
+org = "demo"
+name = "ehr_integration"
+version = "0.1.0"
+distribution = "2201.12.10"
+
+[build-options]
+optimizeDependencyCompilation = true
