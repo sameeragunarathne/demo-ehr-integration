@@ -35,7 +35,6 @@ final fhir_client:FHIRConnector mosaicFhirClient = check new (
 
 service on new tcp:Listener(59519) {
     remote function onConnect(tcp:Caller caller) returns tcp:ConnectionService {
-        log:printInfo("EHR-Integration: CompuLink EHR connected from port " + caller.remotePort.toString());
         return new HL7ConnectionService();
     }
 }
@@ -56,7 +55,6 @@ service class HL7ConnectionService {
     }
 
     remote function onClose() {
-        log:printInfo("EHR-Integration: CompuLink EHR disconnected");
     }
 }
 
