@@ -90,8 +90,7 @@ function processHL7Message(tcp:Caller caller, readonly & byte[] data) returns er
     // Step 3: Standard HL7 v2.3 → FHIR R4 Bundle (v2tofhirr4 transformer)
     log:printInfo("EHR-Integration: Transforming HL7 -> FHIR R4 Bundle (standard)...");
     json baseFhirJson = check v2tofhirr4:v2ToFhir(hl7String);
-    log:printInfo("EHR-Integration: ── Standard FHIR Bundle ──────────────────────────");
-    log:printInfo(baseFhirJson.toString());
+    log:printInfo("EHR-Integration: ── Standard FHIR Bundle ──────────────────────────", bundle = baseFhirJson);
 
     // Step 4: Apply Mosaic-specific enrichments via data-mapper
     //   • Casts the Patient entry to international401:Patient (cloneWithType)
@@ -102,8 +101,7 @@ function processHL7Message(tcp:Caller caller, readonly & byte[] data) returns er
     r4:Bundle baseFhirBundle = check baseFhirJson.cloneWithType(r4:Bundle);
     r4:Bundle enrichedBundle = check processBundle(baseFhirBundle, hl7Message);
     json enrichedFhirJson = enrichedBundle.toJson();
-    log:printInfo("EHR-Integration: ── Mosaic-enriched FHIR Bundle ────────────────────");
-    log:printInfo(enrichedFhirJson.toString());
+    log:printInfo("EHR-Integration: ── Mosaic specific data enriched FHIR Bundle ────────────────────", bundle = enrichedFhirJson);
 
     // Step 5: POST enriched FHIR Bundle to Mosaic EMR via FHIR client
     //   The FHIR client extracts "resourceType": "Bundle" from the JSON and
